@@ -1,0 +1,24 @@
+    SELECT DISTINCT ?park ?parkLabel ?countryLabel ?location ?description ?inception 
+           ?area ?elevation ?biome ?biomeLabel ?climate ?climateLabel
+    WHERE {
+      ?park wdt:P31/wdt:P279* wd:Q46169.  # Parc national
+      ?park wdt:P17 ?country.              # Pays
+      ?park wdt:P625 ?location.            # Coordonnées
+      ?country wdt:P30 wd:Q15.             # En Afrique
+
+      OPTIONAL { ?park schema:description ?description. FILTER(LANG(?description) = "en") }           
+      OPTIONAL { ?park wdt:P571 ?inception. }  # Date de création
+      OPTIONAL { ?park wdt:P2046 ?area. }      # Superficie
+      OPTIONAL { ?park wdt:P2044 ?elevation. } # Élévation
+      OPTIONAL { 
+        ?park wdt:P1435 ?biome.            # Écosystème/Biome
+      }
+      OPTIONAL {
+        ?park wdt:P197 ?climate.           # Zone climatique
+      }
+      
+      SERVICE wikibase:label {
+        bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
+      }
+    }
+    ORDER BY ?parkLabel
